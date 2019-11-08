@@ -26,7 +26,6 @@ class ClientCredentialGrant {
     public static void main(String args[]) throws Exception {
         getAccessTokenByClientCredentialGrant();
 
-        System.out.println("Press any key to exit ...");
         System.in.read();
     }
 
@@ -53,6 +52,8 @@ class ClientCredentialGrant {
             try {
                 String usersListFromGraph = getUsersListFromGraph(res.accessToken());
                 System.out.println("Users in the Tenant = " + usersListFromGraph);
+                
+                System.out.println("Press any key to exit ...");
 
             } catch (IOException e) {
                 e.printStackTrace();
