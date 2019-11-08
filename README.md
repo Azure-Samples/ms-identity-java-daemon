@@ -1,6 +1,7 @@
 ---
 topic: sample
 author: ramya25
+level: 200
 languages:
   - java
 products:
@@ -10,7 +11,7 @@ products:
 description: "Shows how a daemon console app uses MSAL4J to get an access token and call Microsoft Graph."
 ---
 
-# A Java simple daemon console application calling Microsoft Graph with its own identity
+# A Java sample, daemon console application calling Microsoft Graph with its own identity
 
 ## About this sample
 
@@ -47,7 +48,7 @@ From your shell or command line:
 git clone https://github.com/Azure-Samples/ms-identity-java-daemon.git
 ```
 
-or download and exact the repository .zip file.
+or download and extract the repository .zip file.
 
 ### Step 2:  Register the sample with your Azure Active Directory tenant
 
