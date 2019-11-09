@@ -4,6 +4,7 @@ author: ramya25
 level: 200
 languages:
   - java
+  - powershell
 products:
   - azure
   - azure-active-directory
@@ -52,9 +53,15 @@ or download and extract the repository .zip file.
 
 ### Step 2:  Register the sample with your Azure Active Directory tenant
 
-There is one project in this sample. To register it:
+To register the project, you can:
 
-- follow the steps [Step 2: Register the sample with your Azure Active Directory tenant](#step-2-register-the-sample-with-your-azure-active-directory-tenant) and [Step 3:  Configure the sample to use your Azure AD tenant](#choose-the-azure-ad-tenant-where-you-want-to-create-your-applications)
+- either follow the steps [Step 2: Register the sample with your Azure Active Directory tenant](#step-2-register-the-sample-with-your-azure-active-directory-tenant) and [Step 3:  Configure the sample to use your Azure AD tenant](#choose-the-azure-ad-tenant-where-you-want-to-create-your-applications)
+- or use PowerShell scripts that:
+  - **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies)
+  - modify the projects' configuration files.
+
+If you want to use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
+Please note that the configuration of your code (Step 3) still needs to be done manually.
 
 #### Choose the Azure AD tenant where you want to create your applications
 
@@ -103,9 +110,17 @@ Open the `ClientCredentialGrant.java` to configure the project.
 
 ### Step 4: Run the sample
 
-Rebuild the project, and run it.
+From your shell or command line:
 
-Application will start, it will display the users in the tenant.
+- `$ mvn package`
+
+This will generate a `msal-Client-Credential-Grant-Sample-dependencies.jar` file in your /targets directory. Run this using your Java executable like below:
+
+- `$ java -jar msal-Client-Credential-Grant-Sample-dependencies.jar`
+
+`Or` run it from an IDE.
+
+Application will start and it will display the users in the tenant.
 
 ## About the code
 
