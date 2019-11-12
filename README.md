@@ -26,8 +26,8 @@ The app is a Java Console application. It gets the list of users in an Azure AD 
 
 The console application:
 
-- Gets a token from Azure AD in its own name (without a user)
-- Then calls the Microsoft Graph /users endpoint to get the list of users, which it then displays (as Json blob)
+- Gets a token from Azure AD in its own name (without a user).
+- Then calls the Microsoft Graph /users endpoint to get the list of users, which it then displays (as Json blob).
 
 ![Topology](./ReadmeFiles/topology.png)
 
@@ -37,7 +37,7 @@ For more information on the concepts used in this sample, be sure to read the [M
 
 To run this sample, you'll need:
 
-- Working installation of [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and [Maven](https://maven.apache.org/).
+- Working installation of [Java 8 or greater](https://openjdk.java.net/install/) and [Maven](https://maven.apache.org/).
 - An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/).
 - An user account in your Azure AD tenant.
 
