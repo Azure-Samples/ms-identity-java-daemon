@@ -1,0 +1,46 @@
+{
+  "Sample": {
+    "RepositoryUrl": "ms-identity-java-daemon",
+    "Title": "A Java sample, daemon console application calling Microsoft Graph with its own identity",
+    "Level": 200,
+    "Client": "Java console daemon app",
+    "Service": "Microsoft Graph",
+    "Endpoint": "Microsoft identity platform (formerly Azure AD v2.0)"
+  },
+  /*
+   This section describes the Azure AD Applications to configure, and their dependencies
+ */
+  "AADApps": [
+    {
+      "Id": "client",
+      "Name": "java_console_daemon",
+      "Kind": "Daemon",
+      "Audience": "AzureADMyOrg",
+      "PasswordCredentials": "Auto",
+      "RequiredResourcesAccess": [
+        {
+          "Resource": "Microsoft Graph",
+          "ApplicationPermissions": ["User.Read.All"]
+        }
+      ],
+      "ManualSteps": [
+        {
+          "Comment" :  "Navigate to the API permissions page and click on 'Grant admin consent for {tenant}'"
+        }
+      ]
+    }
+  ],
+  "CodeConfiguration": [
+    {
+      "App": "client",
+      "SettingKind": "Text",
+      "SettingFile": "\\..\\Client\\ClientCredentialGrant.java",
+      "Mappings": [
+        {
+          "key": "TenantInfo",
+          "value": "$tenantId"
+        }
+      ]
+    }
+  ]
+}
