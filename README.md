@@ -1,33 +1,37 @@
 ---
-topic: sample
+services: active-directory
+platforms: Java
+endpoint: Microsoft identity platform
+page_type: sample
 author: ramya25
 level: 200
+client: Java console daemon app
+service: Microsoft Graph
 languages:
   - java
-  - powershell
 products:
   - azure
   - azure-active-directory
+  - java
   - office-ms-graph
-description: "Shows how a daemon console app uses MSAL4J to get an access token and call Microsoft Graph."
+description: "This sample demonstrates how a daemon console app can get an access token to call Microsoft Graph using MSAL4J."
 ---
 
-# A Java sample, daemon console application calling Microsoft Graph with its own identity
+# A Java sample demonstrating how a daemon console application can call Microsoft Graph using its own identity using MSAL for Java
 
 ## About this sample
 
 ### Overview
 
-This sample application shows how to use the [Microsoft identity platform endpoint](http://aka.ms/aadv2) to access the data of Microsoft business customers in a long-running, non-interactive process.  It uses the [OAuth 2 client credentials grant](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow) to acquire an access token, which can be used to call the [Microsoft Graph](https://graph.microsoft.io) and access organizational data
-
-The app is a Java Console application. It gets the list of users in an Azure AD tenant by using `Microsoft Authentication Library (MSAL) for Java` to acquire a token.
+The app is a Java Console application. It gets the list of users from of an Azure AD tenant from Microsoft Graph.
+This app demonstrates how to use the [Microsoft identity platform](http://aka.ms/aadv2) to access the data of Microsoft business customers in a long-running, non-interactive process.  It uses the [Microsoft Authentication Library (MSAL) for Java](https://github.com/AzureAD/microsoft-authentication-library-for-java) to acquire an [access token](https://docs.microsoft.com/azure/active-directory/develop/access-tokens),which it then uses to call  [Microsoft Graph](https://graph.microsoft.io) and accesses organizational data. The sample utilizes the [OAuth 2 client credentials grant](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow) to obtain an access token for Microsoft Graph.
 
 ## Scenario
 
 The console application:
 
-- Gets a token from Azure AD in its own name (without a user).
-- Then calls the Microsoft Graph /users endpoint to get the list of users, which it then displays (as Json blob).
+- Acquires an access token from Azure AD using its own identity (without a user).
+- It then calls the Microsoft Graph `/users` endpoint toretrieve a list of users, which it then displays on the screen (as a Json blob).
 
 ![Topology](./ReadmeFiles/topology.png)
 
@@ -39,7 +43,7 @@ To run this sample, you'll need:
 
 - Working installation of [Java 8 or greater](https://openjdk.java.net/install/) and [Maven](https://maven.apache.org/).
 - An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/).
-- An user account in your Azure AD tenant.
+- One or more user accounts in your Azure AD tenant.
 
 ### Step 1:  Clone or download this repository
 
@@ -57,11 +61,34 @@ To register the project, you can:
 
 - either follow the steps [Step 2: Register the sample with your Azure Active Directory tenant](#step-2-register-the-sample-with-your-azure-active-directory-tenant) and [Step 3:  Configure the sample to use your Azure AD tenant](#choose-the-azure-ad-tenant-where-you-want-to-create-your-applications)
 - or use PowerShell scripts that:
-  - **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies)
-  - modify the projects' configuration files.
+  - **automatically** creates the Azure AD applications and related objects (passwords, permissions, dependencies) for you. 
 
-If you want to use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
-Please note that the configuration of your code (Step 3) still needs to be done manually.
+<details>
+  <summary>Expand this section if you want to use this automation:</summary>
+
+1. On Windows, run PowerShell and navigate to the root of the cloned directory
+1. In PowerShell run:
+
+   ```PowerShell
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+   ```
+
+1. Run the script to create your Azure AD application and configure the code of the sample application accordingly.
+1. In PowerShell run:
+
+   ```PowerShell
+   .\AppCreationScripts\Configure.ps1
+   ```
+
+   > Other ways of running the scripts are described in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
+   > The scripts also provide a guide to automated application registration, configuration and removal which can help in your CI/CD scenarios.
+
+1. Please note that the configuration of your code (Step 3) still needs to be done manually.
+1. Open the Visual Studio solution and click start to run the code.
+
+</details>
+
+Follow the steps below to manually walk through the steps to register and configure the applications.
 
 #### Choose the Azure AD tenant where you want to create your applications
 
