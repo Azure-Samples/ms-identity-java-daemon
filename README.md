@@ -23,7 +23,6 @@ description: "This sample demonstrates how a daemon console app can get an acces
 
 ### Overview
 
-The app is a Java Console application. It gets the list of users from of an Azure AD tenant from Microsoft Graph.
 This app demonstrates how to use the [Microsoft identity platform](http://aka.ms/aadv2) to access the data of Microsoft business customers in a long-running, non-interactive process. It uses the [Microsoft Authentication Library (MSAL) for Java](https://github.com/AzureAD/microsoft-authentication-library-for-java) to acquire an [access token](https://docs.microsoft.com/azure/active-directory/develop/access-tokens),which it then uses to call [Microsoft Graph](https://graph.microsoft.io) and accesses organizational data. The sample utilizes the [OAuth 2 client credentials grant](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow) to obtain an access token for Microsoft Graph.
 
 ## Scenario
@@ -109,19 +108,19 @@ Open the project in your IDE to configure the code.
 >In the steps below, "ClientID" is the same as "Application ID" or "AppId" and "Tenant ID" is same as "Directory ID".
 
 1. Open the `src\main\java\ClientCredentialGrant` class
-1. Find the line `final static String TENANT_SPECIFIC_AUTHORITY` and replace `Enter_the_Tenant_Info_Here` with your Azure AD **Tenant Id**.
-1. Find the line `final static String CONFIDENTIAL_CLIENT_ID` and replace the existing value with the **Application ID (clientId)** of the `java-daemon-console` application copied from the Azure portal.
-1. Find the line `final static String CONFIDENTIAL_CLIENT_SECRET` and replace the existing value with the **key value** you saved during the creation of the `daemon-console` app, in the Azure portal.
+1. Find the line `private final static String TENANT_SPECIFIC_AUTHORITY` and replace `Enter_the_Tenant_Info_Here` with your Azure AD **Tenant Id**.
+1. Find the line `private final static String CONFIDENTIAL_CLIENT_ID` and replace the existing value with the **Application ID (clientId)** of the `java-daemon-console` application copied from the Azure portal.
+1. Find the line `private final static String CONFIDENTIAL_CLIENT_SECRET` and replace the existing value with the **key value** you saved during the creation of the `daemon-console` app, in the Azure portal.
 
 ### Step 4: Run the sample
 
 From your shell or command line:
 
-- `$ mvn package`
+- `$ mvn clean compile assembly:single`
 
-This will generate a `msal-Client-Credential-Grant-Sample-dependencies.jar` file in your /targets directory. Run this using your Java executable like below:
+This will generate a `msal-client-credential-sample-1.0.0.jar` file in your /targets directory. Run this using your Java executable like below:
 
-- `$ java -jar msal-Client-Credential-Grant-Sample-dependencies.jar`
+- `$ java -jar msal-client-credential-sample-1.0.0.jar`
 
 `Or` run it from an IDE.
 
@@ -146,7 +145,7 @@ The relevant code for this sample is in the `ClientCredentialGrant.java` file.
 
 2. Define the scopes.
 
-   Specific to client credentials, you don't specify, in the code, the individual scopes you want to access. You have statically declared them during the application registration step. Therefore the only possible scope is "resource/.default" (here "https://graph.microsoft.com/.default")
+   Specific to client credentials, you don't specify the individual scopes you want to access. You have statically declared them during the application registration step. Therefore the only possible scope is "resource/.default" (here "https://graph.microsoft.com/.default")
    which means "the static permissions defined in the application"
 
     ```Java
@@ -165,7 +164,7 @@ The relevant code for this sample is in the `ClientCredentialGrant.java` file.
   
         // AADSTS70011
         // Invalid scope. The scope has to be of the form "https://resourceurl/.default"
-        // Mitigation: this is a dev issue. Change the scope to be as expected
+        // Mitigation Change the scope to be as expected 
     }
     ```
 
@@ -177,14 +176,8 @@ The relevant code for this sample is in the `ClientCredentialGrant.java` file.
 
 ### Did you forget to provide admin consent? This is needed for daemon apps
 
-If you get an error `Forbidden` when calling the API, this is because the tenant administrator has not granted permissions
+If you get an `Forbidden` error when calling the API, this is because the tenant administrator has not granted permissions
 to the application. Check the steps in [Register the client app (daemon-console)](#register-the-client-app-daemon-console) above.
-
-You will typically see, on the output window, something like the following:
-
-```Json
-Connection returned HTTP code: 403 with message: Forbidden
-```
 
 ## Community Help and Support
 

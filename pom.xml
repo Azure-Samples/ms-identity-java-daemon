@@ -5,19 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>msal-Client-Credential-Grant-Sample</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>msal-client-credential-sample</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>msal4j</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.29</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 
@@ -26,13 +21,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ClientCredentialGrant</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>
