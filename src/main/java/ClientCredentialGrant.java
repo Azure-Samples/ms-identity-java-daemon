@@ -14,22 +14,32 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
 class ClientCredentialGrant {
 
-    final static String TENANT_SPECIFIC_AUTHORITY = "https://login.microsoftonline.com/Enter_Tenant_Info_Here/";
-    final static String CONFIDENTIAL_CLIENT_ID = "Enter_the_Application_Id_here";
-    final static String CONFIDENTIAL_CLIENT_SECRET = "Enter_the_Client_Secret_Here";
-    final static String GRAPH_DEFAULT_SCOPE = "https://graph.microsoft.com/.default";
+    private final static String TENANT_SPECIFIC_AUTHORITY = "https://login.microsoftonline.com/Enter_Tenant_Info_Here/";
+    private final static String CONFIDENTIAL_CLIENT_ID = "Enter_the_Application_Id_here";
+    private final static String CONFIDENTIAL_CLIENT_SECRET = "Enter_the_Client_Secret_Here";
+    private final static String GRAPH_DEFAULT_SCOPE = "https://graph.microsoft.com/.default";
 
-    public static void main(String args[]) throws Exception {
-        getAccessTokenByClientCredentialGrant();
+    public static void main(String args[]) throws Exception{
 
-        System.in.read();
+        try {
+            IAuthenticationResult result = getAccessTokenByClientCredentialGrant();
+            String usersListFromGraph = getUsersListFromGraph(result.accessToken());
+
+            System.out.println("Users in the Tenant = " + usersListFromGraph);
+            System.out.println("Press any key to exit ...");
+            System.in.read();
+
+        } catch(Exception ex){
+            System.out.println("Oops! We have an exception of type - " + ex.getClass());
+            System.out.println("Exception message - " + ex.getMessage());
+            throw ex;
+        }
     }
 
-    private static void getAccessTokenByClientCredentialGrant() throws Exception {
+    private static IAuthenticationResult getAccessTokenByClientCredentialGrant() throws Exception {
 
         ConfidentialClientApplication app = ConfidentialClientApplication.builder(
                 CONFIDENTIAL_CLIENT_ID,
@@ -44,27 +54,7 @@ class ClientCredentialGrant {
                 .build();
 
         CompletableFuture<IAuthenticationResult> future = app.acquireToken(clientCredentialParam);
-
-        BiConsumer<IAuthenticationResult, Throwable> processAuthResult = (res, ex) -> {
-            if (ex != null) {
-                System.out.println("Oops! We have an exception - " + ex.getMessage());
-            }
-            try {
-                String usersListFromGraph = getUsersListFromGraph(res.accessToken());
-                System.out.println("Users in the Tenant = " + usersListFromGraph);
-                
-                System.out.println("Press any key to exit ...");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
-            }
-        };
-
-        future.whenCompleteAsync(processAuthResult);
-        future.join();
-
+        return future.get();
     }
 
     private static String getUsersListFromGraph(String accessToken) throws IOException {
