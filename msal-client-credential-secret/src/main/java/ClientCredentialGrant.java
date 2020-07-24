@@ -8,21 +8,25 @@ import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 class ClientCredentialGrant {
 
-    private final static String TENANT_SPECIFIC_AUTHORITY = "https://login.microsoftonline.com/Enter_Tenant_Info_Here/";
-    private final static String CONFIDENTIAL_CLIENT_ID = "Enter_the_Application_Id_here";
-    private final static String CONFIDENTIAL_CLIENT_SECRET = "Enter_the_Client_Secret_Here";
-    private final static String GRAPH_DEFAULT_SCOPE = "https://graph.microsoft.com/.default";
+    private static String authority;
+    private static String clientId;
+    private static String secret;
+    private static String scope;
 
     public static void main(String args[]) throws Exception{
+
+        setUpSampleData();
 
         try {
             IAuthenticationResult result = getAccessTokenByClientCredentialGrant();
@@ -42,15 +46,15 @@ class ClientCredentialGrant {
     private static IAuthenticationResult getAccessTokenByClientCredentialGrant() throws Exception {
 
         ConfidentialClientApplication app = ConfidentialClientApplication.builder(
-                CONFIDENTIAL_CLIENT_ID,
-                ClientCredentialFactory.createFromSecret(CONFIDENTIAL_CLIENT_SECRET))
-                .authority(TENANT_SPECIFIC_AUTHORITY)
+                clientId,
+                ClientCredentialFactory.createFromSecret(secret))
+                .authority(authority)
                 .build();
 
         // With client credentials flows the scope is ALWAYS of the shape "resource/.default", as the
         // application permissions need to be set statically (in the portal), and then granted by a tenant administrator
         ClientCredentialParameters clientCredentialParam = ClientCredentialParameters.builder(
-                Collections.singleton(GRAPH_DEFAULT_SCOPE))
+                Collections.singleton(scope))
                 .build();
 
         CompletableFuture<IAuthenticationResult> future = app.acquireToken(clientCredentialParam);
@@ -83,5 +87,19 @@ class ClientCredentialGrant {
             return String.format("Connection returned HTTP code: %s with message: %s",
                     httpResponseCode, conn.getResponseMessage());
         }
+    }
+
+    /**
+     * Helper function unique to this sample setting. In a real application these wouldn't be so hardcoded, for example
+     * different users may need different authority endpoints or scopes
+     */
+    private static void setUpSampleData() throws IOException {
+        // Load properties file and set properties used throughout the sample
+        Properties properties = new Properties();
+        properties.load(new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("").getPath() + "application.properties"));
+        authority = properties.getProperty("AUTHORITY");
+        clientId = properties.getProperty("CLIENT_ID");
+        secret = properties.getProperty("SECRET");
+        scope = properties.getProperty("SCOPE");
     }
 }
