@@ -113,7 +113,7 @@ class ClientCredentialGrant {
     private static void setUpSampleData() throws IOException {
         // Load properties file and set properties used throughout the sample
         Properties properties = new Properties();
-        properties.load(new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("").getPath() + "application.properties"));
+        properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties"));
         authority = properties.getProperty("AUTHORITY");
         clientId = properties.getProperty("CLIENT_ID");
         keyPath = properties.getProperty("KEY_PATH");
