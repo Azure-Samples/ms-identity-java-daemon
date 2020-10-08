@@ -8,7 +8,6 @@ import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -96,7 +95,7 @@ class ClientCredentialGrant {
     private static void setUpSampleData() throws IOException {
         // Load properties file and set properties used throughout the sample
         Properties properties = new Properties();
-        properties.load(new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("").getPath() + "application.properties"));
+        properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties"));
         authority = properties.getProperty("AUTHORITY");
         clientId = properties.getProperty("CLIENT_ID");
         secret = properties.getProperty("SECRET");
