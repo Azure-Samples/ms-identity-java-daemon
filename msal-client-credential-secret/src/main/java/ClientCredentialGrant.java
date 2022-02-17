@@ -22,12 +22,14 @@ class ClientCredentialGrant {
     private static String clientId;
     private static String secret;
     private static String scope;
+    private static ConfidentialClientApplication app;
 
     public static void main(String args[]) throws Exception{
 
         setUpSampleData();
 
         try {
+        	BuildConfidentialClientObject();
             IAuthenticationResult result = getAccessTokenByClientCredentialGrant();
             String usersListFromGraph = getUsersListFromGraph(result.accessToken());
 
@@ -41,21 +43,24 @@ class ClientCredentialGrant {
             throw ex;
         }
     }
-
-    private static IAuthenticationResult getAccessTokenByClientCredentialGrant() throws Exception {
-
-        ConfidentialClientApplication app = ConfidentialClientApplication.builder(
+    private static void BuildConfidentialClientObject() throws Exception {
+        
+    	// Load properties file and set properties used throughout the sample
+    	app = ConfidentialClientApplication.builder(
                 clientId,
                 ClientCredentialFactory.createFromSecret(secret))
                 .authority(authority)
-                .build();
+                .build();		        
+    }
 
-        // With client credentials flows the scope is ALWAYS of the shape "resource/.default", as the
+    private static IAuthenticationResult getAccessTokenByClientCredentialGrant() throws Exception {
+    	
+    	// With client credentials flows the scope is ALWAYS of the shape "resource/.default", as the
         // application permissions need to be set statically (in the portal), and then granted by a tenant administrator
         ClientCredentialParameters clientCredentialParam = ClientCredentialParameters.builder(
                 Collections.singleton(scope))
                 .build();
-
+    	
         CompletableFuture<IAuthenticationResult> future = app.acquireToken(clientCredentialParam);
         return future.get();
     }

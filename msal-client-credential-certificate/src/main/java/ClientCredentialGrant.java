@@ -32,12 +32,14 @@ class ClientCredentialGrant {
     private static String scope;
     private static String keyPath;
     private static String certPath;
+    private static ConfidentialClientApplication app;
 
     public static void main(String args[]) throws Exception{
 
         setUpSampleData();
 
         try {
+        	BuildConfidentialClientObject();
             IAuthenticationResult result = getAccessTokenByClientCredentialGrant();
             String usersListFromGraph = getUsersListFromGraph(result.accessToken());
 
@@ -51,20 +53,23 @@ class ClientCredentialGrant {
             throw ex;
         }
     }
+ private static void BuildConfidentialClientObject() throws Exception {
+        
+	 PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(keyPath)));
+     PrivateKey key = KeyFactory.getInstance("RSA").generatePrivate(spec);
 
+     InputStream certStream = new ByteArrayInputStream(Files.readAllBytes(Paths.get(certPath)));
+     X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(certStream);
+
+     app = ConfidentialClientApplication.builder(
+             clientId,
+             ClientCredentialFactory.createFromCertificate(key, cert))
+             .authority(authority)
+             .build();        
+    }
     private static IAuthenticationResult getAccessTokenByClientCredentialGrant() throws Exception {
 
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(keyPath)));
-        PrivateKey key = KeyFactory.getInstance("RSA").generatePrivate(spec);
-
-        InputStream certStream = new ByteArrayInputStream(Files.readAllBytes(Paths.get(certPath)));
-        X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(certStream);
-
-        ConfidentialClientApplication app = ConfidentialClientApplication.builder(
-                clientId,
-                ClientCredentialFactory.createFromCertificate(key, cert))
-                .authority(authority)
-                .build();
+       
 
         // With client credentials flows the scope is ALWAYS of the shape "resource/.default", as the
         // application permissions need to be set statically (in the portal), and then granted by a tenant administrator
