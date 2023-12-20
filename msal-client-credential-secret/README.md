@@ -171,7 +171,7 @@ The relevant code for this sample is in the `ClientCredentialGrant.java` file.
     In this case calling "https://graph.microsoft.com/v1.0/users" with the access token as a bearer token.
 
     ```Java
-       URL url = new URL("https://graph.microsoft.com/v1.0/users");
+       URL url = new URI("https://graph.microsoft.com/v1.0/users").toURL();
        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
        //...
