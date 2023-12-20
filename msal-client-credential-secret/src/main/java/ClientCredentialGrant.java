@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Properties;
@@ -65,8 +67,8 @@ class ClientCredentialGrant {
         return future.get();
     }
 
-    private static String getUsersListFromGraph(String accessToken) throws IOException {
-        URL url = new URL("https://graph.microsoft.com/v1.0/users");
+    private static String getUsersListFromGraph(String accessToken) throws IOException, URISyntaxException {
+        URL url = new URI("https://graph.microsoft.com/v1.0/users").toURL();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         conn.setRequestMethod("GET");
